@@ -16,7 +16,7 @@ class Chats extends Component {
             <input className="form-control input-lg" id="inputlg" type="text" placeholder="Search chats"/>
           </div>
 
-          <div className="border-bottom">
+          <div className="border-bottom my-3 py-3">
             <div className="row ml-2">
               <div className=" my-2 col-2">
                 <img src="http://localhost:800/static/icons/folder.png" alt="folder" height="24" width="24"/>
@@ -32,14 +32,10 @@ class Chats extends Component {
                 <div className="row">11:05</div>
               </div>
 
-
             </div>
           </div>
-
-
         </div>
     )
-
   }
 }
 
