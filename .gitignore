@@ -7,3 +7,5 @@ venv
 db.sqlite3
 /static
 .idea/
+
+*.png
