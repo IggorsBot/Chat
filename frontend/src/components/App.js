@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import Menu from './Menu/Menu'
+
 class App extends Component {
   render() {
     return(
-      <div>
-        <div className="d-flex bd-highlight">
-          <div className="p-2 bd-highlight mx-5">Flex item</div>
-          <div className="p-2 bd-highlight mx-5">Flex item</div>
-          <div className="p-2 flex-grow-1 bd-highlight">Third flex item</div>
+      <div className="d-flex bd-highlight">
+        <div className="p-2 bd-highlight px-5 border-right">
+          <Menu />
         </div>
+        <div className="p-2 bd-highlight">Flex item</div>
+        <div className="p-2 bd-highlight flex-grow-1">Third flex item</div>
       </div>
     )
 
