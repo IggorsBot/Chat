@@ -8,7 +8,7 @@ class Favorites extends Component {
         <div>
           <div className="mr-5">
             <div className="row mt-3 mr-5">
-              <div className="mr-5"><h2 className="mx-5 my-2">Archived</h2></div>
+              <div className="mr-5"><h2 className="mx-5 my-2">Favorites</h2></div>
             </div>
           </div>
 
