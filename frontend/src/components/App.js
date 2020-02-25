@@ -62,7 +62,7 @@ class App extends Component {
   render() {
     return(
       <div className="d-flex bd-highlig">
-        <div className="p-2 bd-highlight px-5 border-right">
+        <div className="py-2 bd-highlight px-4 border-right">
           <Menu switchMenu={this.switchMenu}/>
         </div>
 
