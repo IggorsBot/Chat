@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import Menu from './Menu/Menu'
-import Chats from './Chats/Chats'
-import Friends from './Friends'
-import Archived from './Archived'
-import Favorites from './Favorites'
+import Chats from './MenuChats/MenuChats'
+import Friends from './MenuFriends/MenuFriends'
+import Archived from './MenuArchived/MenuArchived'
+import Favorites from './MenuFavorites/MenuFavorites'
 
-import Chat from './Chat'
+import Chat from './Chat/Chat'
 
 
 
@@ -32,6 +32,7 @@ class App extends Component {
 
           </div>
         </div>
+        
       </div>
     )
 
