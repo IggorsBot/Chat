@@ -2,15 +2,12 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Style from 'style-it';
 
-import Menu from './Menu/Menu'
-import Chats from './MenuChats/MenuChats'
-import Friends from './MenuFriends/MenuFriends'
-import Archived from './MenuArchived/MenuArchived'
-import Favorites from './MenuFavorites/MenuFavorites'
-
-import Chat from './Chat/Chat'
-
-
+import ConversationList from './ConversationList'
+import Chat from './Chat'
+import Menu from './Menu'
+import ChatForm from './ChatForm'
+import ChatTitle from './ChatTitle'
+import SearchContainer from './SearchContainer'
 
 class App extends Component {
 
@@ -62,29 +59,18 @@ class App extends Component {
 
   render() {
     return(
+      <div id="chat-container">
+        <SearchContainer />
+        <ConversationList />
+        <Menu />
 
-        <div className="d-flex bd-highlig">
-          <div className="py-2 bd-highlight px-4 border-right">
-            <Menu switchMenu={this.switchMenu}/>
-          </div>
 
-          <div className="p-2 bd-highlight flex-grow-1">
-            <div className="row">
+        <ChatTitle />
+        <Chat />
+        <ChatForm />
 
-              <div className="col-3  border-right">
-                {this.state.chats && <Chats/>}
-                {this.state.friends && <Friends/>}
-                {this.state.archived && <Archived/>}
-                {this.state.favorites && <Favorites/>}
-              </div>
-
-              <div className="col-9">
-                <Chat />
-              </div>
-            </div>
-          </div>
-        </div>
-    )
+      </div>
+        )
   }
 }
 
