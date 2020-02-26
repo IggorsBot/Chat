@@ -64,11 +64,8 @@ class App extends Component {
         <ConversationList />
         <Menu />
 
-
-        <ChatTitle />
         <Chat />
-        <ChatForm />
-
+      
       </div>
         )
   }
