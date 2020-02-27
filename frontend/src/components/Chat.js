@@ -12,9 +12,9 @@ class Chat extends React.Component {
   state = {
    name: 'Bob',
    messages: [
-     {body: "Hey man. What's up", time: "Apr 16", name: "Bob"},
+     {body: "Ok", time: "Apr 16", name: "Bob"},
      {body: "I'm fine", time: "Apr 16", name: "Frank"},
-     {body: "Ok", time: "Apr 16", name: "Bob"}
+     {body: "Hey man. What's up", time: "Apr 16", name: "Bob"}
    ],
  }
 
@@ -22,19 +22,16 @@ class Chat extends React.Component {
 
   componentDidMount() {
     this.ws.onopen = () => {
-      // on connecting, do nothing but log it to the console
       console.log('connected')
     }
 
     this.ws.onmessage = evt => {
-      // on receiving a message, add it to the list of messages
       const message = JSON.parse(evt.data)
       this.addMessage(message)
     }
 
     this.ws.onclose = () => {
       console.log('disconnected')
-      // automatically try to reconnect on connection loss
       this.setState({
         ws: new WebSocket(URL),
       })
@@ -42,11 +39,10 @@ class Chat extends React.Component {
   }
 
   addMessage = message =>
-    this.setState(state => ({ messages: [message, ...state.messages] }))
+    this.setState(state => ({ messages: [ message, ...state.messages]}))
 
   submitMessage = messageString => {
-    // on submitting the ChatInput form, send the message, add it to the list and reset the input
-    const message = { name: this.state.name, message: messageString }
+    const message = { name: this.state.name, body: messageString, time: "Apr 16"}
     this.ws.send(JSON.stringify(message))
     this.addMessage(message)
   }
