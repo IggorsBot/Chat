@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 
 import ChatTitle from './ChatTitle'
-import Conversation from './Conversation'
+import ChatMessage from './ChatMessage'
 import ChatForm from './ChatForm'
 
 const URL = 'ws://localhost:8080/ws'
@@ -11,7 +11,11 @@ class Chat extends React.Component {
 
   state = {
    name: 'Bob',
-   messages: [],
+   messages: [
+     {body: "Hey man. What's up", time: "Apr 16", name: "Bob"},
+     {body: "I'm fine", time: "Apr 16", name: "Frank"},
+     {body: "Ok", time: "Apr 16", name: "Bob"}
+   ],
  }
 
  ws = new WebSocket(URL)
@@ -51,7 +55,14 @@ class Chat extends React.Component {
     return (
       <Fragment>
         <ChatTitle />
-        <Conversation />
+        <div id="chat-message-list">
+
+        {this.state.messages.map((message, index)=>{
+          return (
+            <ChatMessage message={message} key={index}/>
+          )
+        })}
+        </div>
         <ChatForm ws={this.ws} onSubmitMessage={messageString => this.submitMessage(messageString)}/>
       </Fragment>
     )
