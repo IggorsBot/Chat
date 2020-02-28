@@ -1,29 +1,22 @@
 from aiohttp import web, WSMsgType
 import aiopg
-
-
-    # await cur.execute("SELECT name, contect, date_create FROM messages, users")
-    # ret = await cur.fetchall()
-
+from chat_database import create_message, get_messages_chat
 
 async def index(request):
     return web.FileResponse('./../frontend/templates/index.html')
-
-async def create_message(message):
-    print(message)
-    conn = await aiopg.connect(database='chatdb', user='chat', password='chatpass', host='localhost')
-    cur = await conn.cursor()
-
-    s = "INSERT INTO messages (message_id, chat_id, user_id, contect, date_create) VALUES (5, 1, 1, '{message}', now());".format(message=message[1:-1])
-    await cur.execute(s)
-    cur.close()
 
 
 async def websocket_handler(request):
 
     ws = web.WebSocketResponse()
     await ws.prepare(request)
-    print('here')
+
+    chat_messages = await get_messages_chat()
+    # for message in chat_messages:
+    #     await ws.send_str(str(message))
+    # await ws.send_json({"result":4, "count":42})
+    for message in chat_messages:
+        await ws.send_json(message)
 
     async for msg in ws:
         if msg.type == WSMsgType.TEXT:
@@ -39,12 +32,9 @@ async def websocket_handler(request):
 
     return ws
 
-
 app = web.Application()
 app.add_routes([web.get('/', index)])
 app.add_routes([web.get('/ws', websocket_handler)])
-
-
 
 
 web.run_app(app)
