@@ -42,8 +42,8 @@ class Chat extends React.Component {
     this.setState(state => ({ messages: [ message, ...state.messages]}))
 
   submitMessage = messageString => {
-    const message = { name: this.state.name, body: messageString, time: "Apr 16"}
-    this.ws.send(JSON.stringify(message))
+    const message = { name: this.state.name, body: messageString, time: "Apr 16", recipient: "Frank"}
+    this.ws.send(JSON.stringify(messageString))
     this.addMessage(message)
   }
 
