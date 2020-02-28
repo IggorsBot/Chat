@@ -12,9 +12,9 @@ class Chat extends React.Component {
   state = {
    name: 'Bob',
    messages: [
-     {body: "Ok", time: "Apr 16", name: "Bob"},
-     {body: "I'm fine", time: "Apr 16", name: "Frank"},
-     {body: "Hey man. What's up", time: "Apr 16", name: "Bob"}
+     {contect: "Ok", data: "Apr 16", user: "Bob"},
+     {contect: "I'm fine", data: "Apr 16", user: "Frank"},
+     {contect: "Hey man", data: "Apr 16", user: "Bob"}
    ],
  }
 
