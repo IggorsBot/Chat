@@ -7,7 +7,7 @@ async def create_message(message):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                s = "INSERT INTO messages (chat_id, user_id, contect, date_create) VALUES (1, 1, '{message}', now());".format(message=message[1:-1])
+                s = "INSERT INTO messages (chat_id, user_id, contect, date_create) VALUES ({chat_id}, {user}, '{contect}', now());".format(chat_id=message['chatId'], user=message['user'], contect=message['contect'])
                 await cur.execute(s)
 
 

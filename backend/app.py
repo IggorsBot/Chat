@@ -4,6 +4,7 @@ from chat_database import create_message, get_messages_chat
 import asyncio
 import json
 import aiohttp_cors
+from ast import literal_eval
 
 
 async def index(request):
@@ -19,8 +20,9 @@ async def websocket_handler(request):
             if msg.data == 'close':
                 await ws.close()
             else:
-                print(msg.data)
-                # await create_message(msg.data)
+                msg_dict = literal_eval(msg.data)
+                print(msg_dict)
+                await create_message(msg_dict)
 
         elif msg.type == WSMsgType.ERROR:
             print('ws connection closed with exception %s' %
@@ -33,26 +35,17 @@ async def websocket_handler(request):
 async def messages(request):
     chat_id = request.match_info.get('chat_id')
     chat_messages = await get_messages_chat(chat_id)
-    print(chat_messages)
     return web.Response(text=json.dumps(chat_messages), status=200, headers={
         "X-Custom-Server-Header": "Custom data",
     })
 
 app = web.Application()
 app.add_routes([web.get('/', index)])
-app.add_routes([web.get('/messages/{chat_id}', messages)])
 app.add_routes([web.get('/ws', websocket_handler)])
-
-async def handler(request):
-    return web.Response(
-        text="Hello!",
-        headers={
-            "X-Custom-Server-Header": "Custom data",
-        })
 
 
 cors = aiohttp_cors.setup(app)
-resource = cors.add(app.router.add_resource("/hello/{chat_id}"))
+resource = cors.add(app.router.add_resource("/messages/{chat_id}"))
 route = cors.add(
     resource.add_route("GET", messages), {
         "http://127.0.0.1:800": aiohttp_cors.ResourceOptions(
