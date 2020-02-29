@@ -9,63 +9,43 @@ import ChatForm from './ChatForm'
 import ChatTitle from './ChatTitle'
 import SearchContainer from './SearchContainer'
 
+import axios from 'axios'
+import 'babel-polyfill';
+
 class App extends Component {
 
   state = {
-    chats: true,
-    friends: false,
-    archived: false,
-    favorites: false,
+    chatId: 0,
+    messages: [],
   }
 
-  switchMenu = (title) => {
-    switch(title){
-      case 'Chats':
-        this.setState({
-          chats: true,
-          friends: false,
-          favorites: false,
-          archived: false
-        });
+  changeChat = (chatId) => {
+    this.getMessages(chatId)
+  }
 
-        break;
-      case 'Friends':
-        this.setState({
-          chats: false,
-          friends: true,
-          favorites: false,
-          archived: false
-        });
-        break;
-      case 'Archived':
-        this.setState({
-          chats: false,
-          friends: false,
-          favorites: false,
-          archived: true
-        });
-        break;
-      case 'Favorites':
-        this.setState({
-          chats: false,
-          friends: false,
-          favorites: true,
-          archived: false
-        });
-        break;
+  async getMessages (chatId) {
+    try {
+      // let res = await axios.get(`http://localhost:8080/messages/${this.state.chatId}`)
+      let res = await axios.get(`http://localhost:8080/hello/${chatId}`)
+      this.setState({ messages: res.data, chatId: chatId})
+
+    } catch (error) {
+      console.log("error", error)
     }
   }
+
+
 
 
   render() {
     return(
       <div id="chat-container">
         <SearchContainer />
-        <ConversationList />
+        <ConversationList changeChat={this.changeChat}/>
         <Menu />
 
-        <Chat />
-      
+        <Chat messages={this.state.messages} chatId={this.state.chatId}/>
+
       </div>
         )
   }

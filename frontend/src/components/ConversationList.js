@@ -1,69 +1,32 @@
 import React from 'react'
 
 class ConversationList extends React.Component{
+  state = {
+    conversations: [
+      {title: "Daryl Duckmanton", date: "Apr 16", message: "This is a message"},
+      {title: "Kim O'Nell", date: "Apr 16", message: "Very funny"},
+      {title: "Daryl Duckmanton", date: "Apr 16", message: "This is a message"},
+    ]
+  }
   render(){
     return(
       <div id="conversation-list">
-        <div className="conversation active">
-          <img  src="daryl.png"/>
-          <div className="title-text">
-            Daryl Duckmanton
+      {this.state.conversations.map((conversation, index)=>{
+        return (
+          <div className="conversation" key={index} onClick={()=>{this.props.changeChat(index)}}>
+            <img  src="daryl.png"/>
+            <div className="title-text">
+              {conversation.title}
+            </div>
+            <div className="created-date">
+              {conversation.date}
+            </div>
+            <div className="conversation-message">
+              {conversation.message}
+            </div>
           </div>
-          <div className="created-date">
-            Apr 16
-          </div>
-          <div className="conversation-message">
-            This is a message.
-          </div>
-        </div>
-        <div className="conversation">
-          <img  src="daryl.png"/>
-          <div className="title-text">
-            Kim O'Nell
-          </div>
-          <div className="created-date">
-            2 days ago
-          </div>
-          <div className="conversation-message">
-            Very funny.
-          </div>
-        </div>
-        <div className="conversation">
-          <img  src="daryl.png"/>
-          <div className="title-text">
-            Daryl Duckmanton
-          </div>
-          <div className="created-date">
-            Apr 16
-          </div>
-          <div className="conversation-message">
-            This is a message.
-          </div>
-        </div>
-        <div className="conversation">
-          <img  src="daryl.png"/>
-          <div className="title-text">
-            Daryl Duckmanton
-          </div>
-          <div className="created-date">
-            Apr 16
-          </div>
-          <div className="conversation-message">
-            This is a message.
-          </div>
-        </div>
-        <div className="conversation">
-          <img  src="daryl.png"/>
-          <div className="title-text">
-            Daryl Duckmanton
-          </div>
-          <div className="created-date">
-            Apr 16
-          </div>
-          <div className="conversation-message">
-            This is a message.
-          </div>
-        </div>
+        )
+      })}
       </div>
     )
   }

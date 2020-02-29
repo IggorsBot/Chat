@@ -3,24 +3,39 @@ import React, {Fragment} from 'react'
 import ChatTitle from './ChatTitle'
 import ChatMessage from './ChatMessage'
 import ChatForm from './ChatForm'
-
-const URL = 'ws://localhost:8080/ws'
-
+import axios from 'axios'
+import 'babel-polyfill';
 
 class Chat extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+     chatId: -1,
+     name: 'Bob',
+     messages: [
+       {contect: "Ok", data: "Apr 16", user: "Bob"},
+       {contect: "I'm fine", data: "Apr 16", user: "Frank"},
+       {contect: "Hey man", data: "Apr 16", user: "Bob"}
+     ],
+   }
+  }
 
-  state = {
-   name: 'Bob',
-   messages: [
-     {contect: "Ok", data: "Apr 16", user: "Bob"},
-     {contect: "I'm fine", data: "Apr 16", user: "Frank"},
-     {contect: "Hey man", data: "Apr 16", user: "Bob"}
-   ],
- }
+  static getDerivedStateFromProps(nextProps, prevState) {
+   return {
+    messages: nextProps.messages,
+    chatId: nextProps.chatId
+   };
+  }
 
- ws = new WebSocket(URL)
+
+  ws = new WebSocket(`ws://localhost:8080/ws`)
 
   componentDidMount() {
+
+    this.setState(state => ({
+      messages: this.props.messages
+    }))
+
     this.ws.onopen = () => {
       console.log('connected')
     }
@@ -32,18 +47,16 @@ class Chat extends React.Component {
 
     this.ws.onclose = () => {
       console.log('disconnected')
-      this.setState({
-        ws: new WebSocket(URL),
-      })
     }
   }
+
 
   addMessage = message =>
     this.setState(state => ({ messages: [ message, ...state.messages]}))
 
   submitMessage = messageString => {
-    const message = { name: this.state.name, body: messageString, time: "Apr 16", recipient: "Frank"}
-    this.ws.send(JSON.stringify(messageString))
+    const message = {contect: messageString, user: "goga", date: "2020-02-28 17:28:09.508931", chatId: this.state.chatId}
+    this.ws.send(JSON.stringify(message))
     this.addMessage(message)
   }
 
