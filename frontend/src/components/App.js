@@ -25,8 +25,7 @@ class App extends Component {
 
   async getMessages (chatId) {
     try {
-      // let res = await axios.get(`http://localhost:8080/messages/${this.state.chatId}`)
-      let res = await axios.get(`http://localhost:8080/hello/${chatId}`)
+      let res = await axios.get(`http://localhost:8080/messages/${chatId}`)
       this.setState({ messages: res.data, chatId: chatId})
 
     } catch (error) {

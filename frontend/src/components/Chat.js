@@ -12,11 +12,7 @@ class Chat extends React.Component {
     this.state = {
      chatId: -1,
      name: 'Bob',
-     messages: [
-       {contect: "Ok", data: "Apr 16", user: "Bob"},
-       {contect: "I'm fine", data: "Apr 16", user: "Frank"},
-       {contect: "Hey man", data: "Apr 16", user: "Bob"}
-     ],
+     messages: [],
    }
   }
 
@@ -55,9 +51,8 @@ class Chat extends React.Component {
     this.setState(state => ({ messages: [ message, ...state.messages]}))
 
   submitMessage = messageString => {
-    const message = {contect: messageString, user: "goga", date: "2020-02-28 17:28:09.508931", chatId: this.state.chatId}
+    const message = {contect: messageString, user: 1, chatId: this.state.chatId}
     this.ws.send(JSON.stringify(message))
-    this.addMessage(message)
   }
 
   render(){
