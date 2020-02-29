@@ -7,16 +7,15 @@ async def create_message(message):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                s = "INSERT INTO messages (message_id, chat_id, user_id, contect, date_create) VALUES (6, 1, 1, '{message}', now());".format(message=message[1:-1])
+                s = "INSERT INTO messages (chat_id, user_id, contect, date_create) VALUES (1, 1, '{message}', now());".format(message=message[1:-1])
                 await cur.execute(s)
-    print("ALL DONE")
 
 
-async def get_messages_chat():
+async def get_messages_chat(chat_id):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute("SELECT contect, users.name, date_create FROM messages, users WHERE chat_id=1")
+                await cur.execute("SELECT contect, users.name, date_create FROM messages, users WHERE chat_id={chat_id}".format(chat_id=chat_id))
                 res = []
 
                 async for row in cur:
