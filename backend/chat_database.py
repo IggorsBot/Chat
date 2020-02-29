@@ -3,6 +3,12 @@ import asyncio
 
 dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
 
+
+
+async def index(request):
+    return web.FileResponse('./../frontend/templates/index.html')
+
+
 async def create_message(message):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
