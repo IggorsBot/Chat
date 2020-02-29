@@ -1,6 +1,6 @@
 import React from 'react'
 
-class SearchContainer extends React.Component {
+class Search extends React.Component {
   render() {
     return (
       <div id="search-container">
@@ -10,4 +10,4 @@ class SearchContainer extends React.Component {
   }
 }
 
-export default SearchContainer
+export default Search

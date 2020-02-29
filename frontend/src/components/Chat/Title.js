@@ -1,6 +1,6 @@
 import React from 'react'
 
-class ChatTitle extends React.Component {
+class Title extends React.Component {
   render() {
     return (
       <div id="chat-title">
@@ -11,4 +11,4 @@ class ChatTitle extends React.Component {
   }
 }
 
-export default ChatTitle
+export default Title

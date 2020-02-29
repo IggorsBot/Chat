@@ -1,12 +1,13 @@
 import React, {Fragment} from 'react'
 
-import ChatTitle from './ChatTitle'
-import ChatMessage from './ChatMessage'
-import ChatForm from './ChatForm'
+import Title from './Title'
+import Message from './Message'
+import InputMessage from './InputMessage'
+
 import axios from 'axios'
 import 'babel-polyfill';
 
-class Chat extends React.Component {
+class Menu extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -58,7 +59,7 @@ class Chat extends React.Component {
   render(){
     return (
       <Fragment>
-        <ChatTitle />
+        <Title />
         <div id="chat-message-list">
 
         {this.state.messages.map((message, index)=>{
@@ -67,10 +68,10 @@ class Chat extends React.Component {
           )
         })}
         </div>
-        <ChatForm ws={this.ws} onSubmitMessage={messageString => this.submitMessage(messageString)}/>
+        <InputMessage ws={this.ws} onSubmitMessage={messageString => this.submitMessage(messageString)}/>
       </Fragment>
     )
   }
 }
 
-export default Chat
+export default Menu

@@ -2,7 +2,7 @@ import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 
 
-class ChatForm extends React.Component{
+class InputMessage extends React.Component{
 
   static propTypes = {
     onSubmitMessage: PropTypes.func.isRequired,
@@ -39,4 +39,4 @@ class ChatForm extends React.Component{
   }
 }
 
-export default ChatForm
+export default InputMessage

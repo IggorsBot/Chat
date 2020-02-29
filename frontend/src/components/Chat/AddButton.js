@@ -1,6 +1,6 @@
 import React from 'react'
 
-class Menu extends React.Component {
+class AddButton extends React.Component {
   render() {
     return (
       <div id="new-message-container">
@@ -12,4 +12,4 @@ class Menu extends React.Component {
   }
 }
 
-export default Menu
+export default AddButton

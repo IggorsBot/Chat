@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react'
 
-function ChatMessage (props) {
+function Message (props) {
     const yourMessage =
       <div className="message-row you-message">
         <div className="message-content">
@@ -26,4 +26,4 @@ function ChatMessage (props) {
     )
 }
 
-export default ChatMessage
+export default Message
