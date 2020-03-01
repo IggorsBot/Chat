@@ -12,7 +12,6 @@ class Auth extends Component {
 
   changeAuth = () => {
     this.setState({flag: !this.state.flag})
-
   }
 
   render() {

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import axios from 'axios'
+import 'babel-polyfill';
 
 class Login extends Component {
   state = {
@@ -10,15 +12,14 @@ class Login extends Component {
   }
 
   sendDataLogin = async () => {
-    console.log('click')
-    // try {
-    //   let result = await axios.post(`http://localhost:8080/auth/login`, {
-    //     email: this.state.email,
-    //     password: this.state.password
-    //   })
-    // } catch (error) {
-    //   console.log("error", error)
-    // }
+      try {
+        let result = await axios.post(`http://localhost:8080/auth/login`, {
+        email: this.state.email,
+        password: this.state.password
+      })
+    } catch (error) {
+      console.log("error", error)
+    }
   }
 
   onChange = e => {
