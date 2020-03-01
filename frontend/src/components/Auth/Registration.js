@@ -26,13 +26,19 @@ class Registration extends Component {
 
   onChange = e => {
         this.setState({[e.target.name]: e.target.value}, () => {
-          if ((this.state.password !== this.state.password_confirm) || (this.state.password.length === 0)){
-            this.setState({disabled: true})
-          } else {
+          if (
+            (
+              (this.state.email.length > 0) &&
+              (this.state.password.length > 0) &&
+              (this.state.password_confirm.length > 0)
+            ) &&
+              (this.state.password === this.state.password_confirm)
+            ){
             this.setState({disabled: false})
+          } else {
+            this.setState({disabled: true})
           }
         });
-
     };
 
 
