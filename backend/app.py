@@ -1,7 +1,7 @@
 from aiohttp import web, WSMsgType
 import aiohttp_cors
-from chat_views import websocket_handler, messages, index
-from auth_views import login, registration
+from chat.chat_views import websocket_handler, messages, index
+from auth.auth_views import login, registration
 
 app = web.Application()
 cors = aiohttp_cors.setup(app)
