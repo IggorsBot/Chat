@@ -33,8 +33,6 @@ class ChatApp extends Component {
   }
 
 
-
-
   render() {
     return(
       <div id="chat-container">

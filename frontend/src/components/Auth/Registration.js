@@ -1,26 +1,60 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import axios from 'axios'
+import 'babel-polyfill';
 
 class Registration extends Component {
-  render() {
-    return(
-      <div id="chat-container">
-        <div id="menu-container">
-        </div>
-        <div id="conversation-list">
-          <button>Login</button>
-          <button>Registration</button>
 
+  state = {
+    email: "",
+    password: "",
+    password_confirm: "",
+  }
+
+  sendDataRegistration = async () => {
+    console.log('registration')
+    try {
+      let result = await axios.post(`http://localhost:8080/auth/registration`, {
+        email: this.state.email,
+        password: this.state.password
+      })
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+
+  onChange = e => {
+        this.setState({[e.target.name]: e.target.value});
+    };
+
+
+  render() {
+    const {email, password, password_confirm} = this.state;
+    return(
+      <div className="login-form">
+        <h1>Registration</h1>
+        <div className="txtb">
+          <input type="text" placeholder="Login" value={email} onChange={this.onChange} name="email"/>
+          <span data-placeholder="Username"></span>
         </div>
-        <div id="new-message-container">
+        <div className="txtb">
+          <input type="password" placeholder="Password" value={password} onChange={this.onChange} name="password"/>
+          <span data-placeholder="Password"></span>
         </div>
-        <div id="chat-message-list">
-          <input/>
+        <div className="txtb">
+          <input type="password" placeholder="Password" value={password_confirm} onChange={this.onChange} name="password_confirm"/>
+          <span data-placeholder="Password"></span>
+        </div>
+
+        <input type="submit" className="logbtn" value="Registration" onClick={this.sendDataRegistration}/>
+
+        <div className="bottom-text">
+          Have you account? <span className="link" onClick={()=>{this.props.changeAuth()}}>Login</span>
         </div>
       </div>
     )
   }
 }
 
-ReactDOM.render(<Registration/>, document.getElementById('app'));
+export default Registration
