@@ -50,7 +50,7 @@ class Registration extends Component {
         <input type="submit" className="logbtn" value="Registration" onClick={this.sendDataRegistration}/>
 
         <div className="bottom-text">
-          Have you account? <span className="link" onClick={()=>{this.props.changeAuth()}}>Login</span>
+          Have you an account? <span className="link" onClick={()=>{this.props.changeAuth()}}>Sing in</span>
         </div>
       </div>
     )
