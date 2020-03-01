@@ -7,13 +7,13 @@ import 'babel-polyfill';
 class Registration extends Component {
 
   state = {
+    disabled: true,
     email: "",
     password: "",
     password_confirm: "",
   }
 
   sendDataRegistration = async () => {
-    console.log('registration')
     try {
       let result = await axios.post(`http://localhost:8080/auth/registration`, {
         email: this.state.email,
@@ -25,12 +25,20 @@ class Registration extends Component {
   }
 
   onChange = e => {
-        this.setState({[e.target.name]: e.target.value});
+        this.setState({[e.target.name]: e.target.value}, () => {
+          if ((this.state.password !== this.state.password_confirm) || (this.state.password.length === 0)){
+            this.setState({disabled: true})
+          } else {
+            this.setState({disabled: false})
+          }
+        });
+
     };
 
 
   render() {
     const {email, password, password_confirm} = this.state;
+
     return(
       <div className="login-form">
         <h1>Registration</h1>
@@ -47,7 +55,7 @@ class Registration extends Component {
           <span data-placeholder="Password"></span>
         </div>
 
-        <input type="submit" className="logbtn" value="Registration" onClick={this.sendDataRegistration}/>
+        <input type="submit" className={this.state.disabled ? "logbtn-deactivate" : "logbtn"} disabled={this.state.disabled}  value="Registration" onClick={this.sendDataRegistration}/>
 
         <div className="bottom-text">
           Have you an account? <span className="link" onClick={()=>{this.props.changeAuth()}}>Sing in</span>

@@ -49,14 +49,14 @@
 }
 
 
-.logbtn{
+.logbtn-deactivate{
   display: block;
   width: 100%;
   height: 50px;
   border: none;
-  background: red;
+  background: #5082c7;
   background-size: 200%;
-  color: black;
+  color: #fff;
   outline: none;
   cursor: pointer;
   transition: .5s;
@@ -78,7 +78,7 @@
 
 
 
-#logbtn{
+.logbtn{
   display: block;
   width: 100%;
   height: 50px;
