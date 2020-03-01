@@ -8,5 +8,4 @@ async def create_user(data):
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
                 s = "INSERT INTO users (email, password) VALUES ('{email}', '{password}');".format(email=data['email'], password=data['password'])
-                print("s", s)
                 await cur.execute(s)
