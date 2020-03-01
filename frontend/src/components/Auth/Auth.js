@@ -23,7 +23,7 @@ class Auth extends Component {
         </div>
         <div id="new-message-container">
         </div>
-        {this.state.flag ? <Login changeAuth={this.changeAuth}/> : <Registration changeAuth={this.changeAuth}/>}
+        {this.state.flag ? <Login changeAuth={this.changeAuth} changeLoading={this.props.changeLoading} /> : <Registration changeAuth={this.changeAuth}/>}
       </div>
     )
   }

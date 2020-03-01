@@ -17,6 +17,9 @@ class Login extends Component {
         email: this.state.email,
         password: this.state.password
       })
+      if (result.status === 200){
+        this.props.changeLoading()
+      }
     } catch (error) {
       console.log("error", error)
     }
