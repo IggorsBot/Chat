@@ -1,5 +1,5 @@
 from aiohttp import web, WSMsgType
-from chat_database import create_message, get_messages_chat
+from chat.chat_database import create_message, get_messages_chat
 import json
 import aiohttp_cors
 from ast import literal_eval

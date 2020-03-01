@@ -34,4 +34,16 @@ route = cors.add(
         )
     })
 
+
+resource = cors.add(app.router.add_resource("/auth/login"))
+route = cors.add(
+    resource.add_route("POST", login), {
+        "http://127.0.0.1:800": aiohttp_cors.ResourceOptions(
+            allow_credentials=True,
+            expose_headers=("X-Custom-Server-Header",),
+            allow_headers=("X-Requested-With", "Content-Type"),
+            max_age=3600,
+        )
+    })
+
 web.run_app(app)
