@@ -31,6 +31,16 @@ async def messages(request):
         "X-Custom-Server-Header": "Custom data",
     })
 
+async def conversations(request):
+    post_data = await request.json()
+    user_id = post_data['user_id']
+    conversations = await get_conversations(user_id)
+    print(conversations)
+    # text=json.dumps(conversation),
+    return web.Response( status=200, headers={
+        "X-Custom-Server-Header": "Custom data",
+    })
+
 
 async def index(request):
     return web.FileResponse('./../frontend/templates/index.html')

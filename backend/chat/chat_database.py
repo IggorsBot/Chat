@@ -23,3 +23,16 @@ async def get_messages_chat(chat_id):
                     ret = {'contect': row[0], 'user': row[1], 'date': str(row[2])}
                     res.append(ret)
                 return res
+
+
+async def get_messages_chat(user_id):
+    async with aiopg.create_pool(dsn) as pool:
+        async with pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("SELECT chat_id, users.name, name FROM chat, users WHERE user_id={user_id".format(user_id=user_id))
+                res = []
+
+                async for row in cur:
+                    ret = {'chat_id': row[0], 'user': row[1], 'title': row[2]}
+                    res.append(ret)
+                return res
