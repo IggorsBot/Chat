@@ -1,12 +1,13 @@
 import aiopg
 import asyncio
 
-dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
 
+dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
 
 async def create_tables():
     print("-----------------------------")
     print("Database initialized...")
+    await create_users_table()
     await create_chat_table()
     await create_party_table()
     await create_messages_table()
@@ -15,20 +16,36 @@ async def create_tables():
     print("-----------------------------")
 
 
+async def create_users_table():
+    """
+    user_id - id пользователя чата
+    name - имя пользователя
+    """
+    async with aiopg.create_pool(dsn) as pool:
+        async with pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                s = """
+                CREATE TABLE IF NOT EXISTS users(
+                    user_id SERIAL PRIMARY KEY,
+                    name VARCHAR(40)
+                )
+                """
+                await cur.execute(s)
+
 async def create_chat_table():
     """
     chat_id - порядковый id чата
     name - заголовок чата, его название
-    user_id - id пользователя чата
+    user_id - id пользователя создавшего чат
     """
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
                 s = """
                 CREATE TABLE IF NOT EXISTS chat(
-                    chat_id SERIAL,
-                    name varchar(40),
-                    user_id integer
+                    chat_id SERIAL PRIMARY KEY,
+                    name VARCHAR(40),
+                    user_id INTEGER REFERENCES users(user_id)
                 )
                 """
                 await cur.execute(s)
@@ -43,8 +60,8 @@ async def create_party_table():
             async with conn.cursor() as cur:
                 s = """
                 CREATE TABLE IF NOT EXISTS party(
-                    chat_id integer,
-                    user_id integer
+                    chat_id INTEGER REFERENCES chat(chat_id),
+                    user_id INTEGER REFERENCES users(user_id)
                 )
                 """
                 await cur.execute(s)
@@ -63,9 +80,9 @@ async def create_messages_table():
             async with conn.cursor() as cur:
                 s = """
                 CREATE TABLE IF NOT EXISTS messages(
-                    message_id SERIAL,
-                    chat_id integer,
-                    user_id integer,
+                    message_id SERIAL PRIMARY KEY,
+                    chat_id INTEGER REFERENCES chat(chat_id),
+                    user_id INTEGER REFERENCES users(user_id),
                     contect varchar(200),
                     date_create DATE NOT NULL DEFAULT CURRENT_DATE
                 )
@@ -83,14 +100,12 @@ async def create_message_status_table():
             async with conn.cursor() as cur:
                 s = """
                 CREATE TABLE IF NOT EXISTS message_status(
-                    message_id integer,
-                    user_id integer,
+                    message_id INTEGER PRIMARY KEY,
+                    user_id INTEGER REFERENCES users(user_id),
                     is_read boolean
                 )
                 """
                 await cur.execute(s)
-
-
 
 def init_database():
     event_loop = asyncio.get_event_loop()
