@@ -83,7 +83,7 @@ async def create_messages_table():
                     message_id SERIAL PRIMARY KEY,
                     chat_id INTEGER REFERENCES chat(chat_id),
                     user_id INTEGER REFERENCES users(user_id),
-                    contect varchar(200),
+                    contect VARCHAR(200),
                     date_create DATE NOT NULL DEFAULT CURRENT_DATE
                 )
                 """
@@ -102,7 +102,7 @@ async def create_message_status_table():
                 CREATE TABLE IF NOT EXISTS message_status(
                     message_id INTEGER PRIMARY KEY,
                     user_id INTEGER REFERENCES users(user_id),
-                    is_read boolean
+                    is_read BOOLEAN
                 )
                 """
                 await cur.execute(s)
