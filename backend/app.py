@@ -1,7 +1,7 @@
 from aiohttp import web, WSMsgType
 
 from routes import setup_routes
-from init_database import init_database
+from init import init_database
 
 
 app = web.Application()

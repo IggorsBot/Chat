@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import jwt
-from auth.auth_database import create_user
+from auth.database import create_user
 from aiohttp import web
 
 JWT_SECRET = 'secret'

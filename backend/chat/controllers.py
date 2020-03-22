@@ -1,5 +1,5 @@
 from aiohttp import web, WSMsgType
-from chat.chat_database import create_message, get_messages_chat
+from chat.database import create_message, get_messages_from_db
 import json
 import aiohttp_cors
 from ast import literal_eval
@@ -24,9 +24,9 @@ async def websocket_handler(request):
     return ws
 
 
-async def messages(request):
+async def get_messages(request):
     chat_id = request.match_info.get('chat_id')
-    chat_messages = await get_messages_chat(chat_id)
+    chat_messages = await get_messages_from_db(chat_id)
     return web.Response(text=json.dumps(chat_messages), status=200, headers={
         "X-Custom-Server-Header": "Custom data",
     })

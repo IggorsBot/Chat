@@ -12,7 +12,7 @@ async def create_message(message):
                 await cur.execute(s)
 
 
-async def get_messages_chat(chat_id):
+async def get_messages_from_db(chat_id):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
