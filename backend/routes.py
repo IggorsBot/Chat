@@ -1,9 +1,9 @@
-from chat.controllers import websocket_handler, GetMessages, conversations, index
+from chat.controllers import websocket_handler, get_messages, conversations, index
 from auth.controllers import login, registration
 import aiohttp_cors
 
 
-def SetupRoutes(app, web):
+def setup_routes(app, web):
     cors = aiohttp_cors.setup(app)
 
     app.add_routes([web.get('/', index)])
@@ -12,7 +12,7 @@ def SetupRoutes(app, web):
 
     resource = cors.add(app.router.add_resource("/messages/{chat_id}"))
     route = cors.add(
-        resource.add_route("GET", GetMessages), {
+        resource.add_route("GET", get_messages), {
             "http://127.0.0.1:800": aiohttp_cors.ResourceOptions(
                 allow_credentials=True,
                 expose_headers=("X-Custom-Server-Header",),
