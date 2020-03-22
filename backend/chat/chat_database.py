@@ -1,8 +1,8 @@
 import aiopg
 import asyncio
 
-dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
 
+dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
 
 async def create_message(message):
     async with aiopg.create_pool(dsn) as pool:
