@@ -1,12 +1,22 @@
 import aiopg
 import asyncio
+import bcrypt
+
 
 dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
 
-users = [{"name": "James"}, {"name": "John"}, {"name": "Robert"},
-        {"name": "Michael"}, {"name": "William"}, {"name": "David"},
-        {"name": "Richard"}, {"name": "Charles"}, {"name": "Joseph"},
-        {"name": "Thomas"}, {"name": "Christopher"}, {"name": "Daniel"}]
+users = [{"name": "James", "password": "123456", "email": "James@mail.ru"},
+    {"name": "John", "password": "qwerty", "email": "John@gmail.com"},
+    {"name": "Robert", "password": "123456", "email": "Robert@mail.ru"},
+    {"name": "Michael", "password": "michaelpass", "email": "Michael@gmail.com"},
+    {"name": "William", "password": "william123", "email": "William@mail.ru"},
+    {"name": "David", "password": "davidqwe", "email": "David@gmail.com"},
+    {"name": "Richard", "password": "123richard", "email": "Richard@mail.ru"},
+    {"name": "Charles", "password": "123456", "email": "Charles@gmail.com"},
+    {"name": "Joseph", "password": "qwerty", "email": "Joseph@mail.ru"},
+    {"name": "Thomas", "password": "thomasqwe", "email": "Thomas@gmail.com"},
+    {"name": "Christopher", "password": "christopher98", "email": "Christopher@mail.ru"},
+    {"name": "Daniel", "password": "daniel1995", "email": "Daniel@gmail.com"}]
 
 chats = [{"name": "Work", "user_id": 1}, {"name": "Rest", "user_id": 4},
         {"name": "Holidays", "user_id": 7}, {"name": "News", "user_id": 10},
@@ -39,8 +49,12 @@ async def create_users(user):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                s = """INSERT INTO users (name)
-                VALUES ('{user_name}');""".format(user_name=user['name'])
+                password = user["password"].encode()
+                hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+                hash_password = hashed.decode()
+                s = """INSERT INTO users (name, password, email)
+                VALUES ('{user_name}', '{password}', '{email}');
+                """.format(user_name=user['name'], password=hash_password, email=user['email'])
                 await cur.execute(s)
 
 async def create_chats(chat):

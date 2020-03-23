@@ -27,7 +27,9 @@ async def create_users_table():
                 s = """
                 CREATE TABLE IF NOT EXISTS users(
                     user_id SERIAL PRIMARY KEY,
-                    name VARCHAR(40)
+                    name VARCHAR(100),
+                    password VARCHAR(200),
+                    email VARCHAR(100)
                 )
                 """
                 await cur.execute(s)

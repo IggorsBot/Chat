@@ -5,7 +5,6 @@ import aiohttp_cors
 
 def setup_routes(app, web):
     cors = aiohttp_cors.setup(app)
-
     app.add_routes([web.get('/', index)])
     app.add_routes([web.get('/ws', websocket_handler)])
     app.router.add_route('POST', '/login', login)
