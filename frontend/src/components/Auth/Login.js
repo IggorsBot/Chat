@@ -13,12 +13,16 @@ class Login extends Component {
 
   sendDataLogin = async () => {
       try {
-        let result = await axios.post(`http://localhost:8080/auth/login`, {
-        email: this.state.email,
-        password: this.state.password
+        let result = await axios(`http://localhost:8080/auth/login`, {
+          method: post,
+          data: {
+            email: this.state.email,
+            password: this.state.password
+          },
+          withCredentials: true
       })
-      if (result.status === 200){
-        this.props.changeLoading()
+      if (result.status == 200){
+        this.props.changeAuth()
       }
     } catch (error) {
       console.log("error", error)
@@ -53,7 +57,7 @@ class Login extends Component {
         <input type="submit" className={this.state.disabled ? "logbtn-deactivate" : "logbtn"} disabled={this.state.disabled} value="Login" onClick={this.sendDataLogin}/>
 
         <div className="bottom-text">
-          Don't have account? <span className="link" onClick={()=>{this.props.changeAuth()}}>Sign up</span>
+          Don't have account? <span className="link" onClick={()=>{this.props.changeFlag()}}>Sign up</span>
         </div>
       </div>
     )

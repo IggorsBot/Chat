@@ -1,24 +1,44 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter, Route} from 'react-router-dom'
 
 import ChatApp from './Chat/ChatApp';
 import Auth from './Auth/Auth'
+import Cookies from 'js-cookie';
+
+
 
 class App extends Component {
+
   state = {
-    isLoading: false,
+    isAuth: false,
   }
 
-  changeLoading = () => {
-    this.setState({isLoading: true})
+  changeAuth = () => {
+    this.setState({isAuth: true})
   }
+
+  isAuthenticated = () => (
+    <div>
+      {this.state.isAuth ? <ChatApp /> : <Auth changeAuth={this.changeAuth}/>}
+    </div>
+  )
+
+  componentDidMount = () => {
+    if (Cookies.get('Token')){
+      this.setState({isAuth: true})
+    }
+  }
+
 
   render() {
-    const {isLoading} = this.state;
     return (
-      <div>
-      {isLoading ? <ChatApp /> : <Auth changeLoading={this.changeLoading}/>}
-      </div>
+      <Fragment>
+        <BrowserRouter>
+          <Route path="/" component={this.isAuthenticated} exact/>
+        </BrowserRouter>
+      </Fragment>
+
     )
   }
 }

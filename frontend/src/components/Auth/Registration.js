@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios'
 import 'babel-polyfill';
 
+
 class Registration extends Component {
 
   state = {
@@ -15,10 +16,17 @@ class Registration extends Component {
 
   sendDataRegistration = async () => {
     try {
-      let result = await axios.post(`http://localhost:8080/auth/registration`, {
-        email: this.state.email,
-        password: this.state.password
+      let result = await axios(`http://127.0.0.1:8080/auth/registration`, {
+        method: "post",
+        data: {
+          email: this.state.email,
+          password: this.state.password
+        },
+        withCredentials: true
       })
+      if (result.status == 200){
+        this.props.changeAuth()
+      }
     } catch (error) {
       console.log("error", error)
     }
@@ -46,6 +54,7 @@ class Registration extends Component {
     const {email, password, password_confirm} = this.state;
 
     return(
+
       <div className="login-form">
         <h1>Registration</h1>
         <div className="txtb">
@@ -64,7 +73,7 @@ class Registration extends Component {
         <input type="submit" className={this.state.disabled ? "logbtn-deactivate" : "logbtn"} disabled={this.state.disabled}  value="Registration" onClick={this.sendDataRegistration}/>
 
         <div className="bottom-text">
-          Have you an account? <span className="link" onClick={()=>{this.props.changeAuth()}}>Sing in</span>
+          Have you an account? <span className="link" onClick={()=>{this.props.changeFlag()}}>Sing in</span>
         </div>
       </div>
     )
