@@ -37,7 +37,7 @@ async def registration(request):
 
     # Создаем token для аутентификации
     token: UUID = uuid4()
-    # await create_user(post_data)
+    await create_user(email, hash_password, token)
 
     response_body: dict = {"hello": "wo"}
     response = web.json_response(
@@ -47,7 +47,7 @@ async def registration(request):
         dumps=json.dumps)
     response.set_cookie(name='Token', value=str(token))
     return response
-# 
+
 # async def test(request):
 #     print('test', request.__dict__)
 #     response_body: dict = {"hello": "wo"}

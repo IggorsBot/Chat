@@ -4,52 +4,27 @@ import aiohttp_cors
 
 
 def setup_routes(app, web):
-    cors = aiohttp_cors.setup(app)
-    app.add_routes([web.get('/', index)])
-    app.add_routes([web.get('/ws', websocket_handler)])
-    app.router.add_route('POST', '/login', login)
-
-    resource = cors.add(app.router.add_resource("/messages/{chat_id}"))
-    route = cors.add(
-        resource.add_route("GET", get_messages), {
-            "http://127.0.0.1:800": aiohttp_cors.ResourceOptions(
+    cors = aiohttp_cors.setup(app, defaults={
+        "*": aiohttp_cors.ResourceOptions(
                 allow_credentials=True,
-                expose_headers=("X-Custom-Server-Header",),
-                allow_headers=("X-Requested-With", "Content-Type"),
-                max_age=3600,
+                expose_headers="*",
+                allow_headers="*",
             )
-        })
+    })
+
+    app.add_routes([web.get('/ws', websocket_handler)])
 
     resource = cors.add(app.router.add_resource("/auth/registration"))
-    route = cors.add(
-        resource.add_route("POST", registration), {
-            "http://127.0.0.1:800": aiohttp_cors.ResourceOptions(
-                allow_credentials=True,
-                expose_headers=("X-Custom-Server-Header",),
-                allow_headers=("X-Requested-With", "Content-Type"),
-                max_age=3600,
-            )
-        })
+    cors.add(resource.add_route("POST", registration))
 
+    resource = cors.add(app.router.add_resource("/messages/{chat_id}"))
+    cors.add(resource.add_route("POST", get_messages))
 
     resource = cors.add(app.router.add_resource("/auth/login"))
-    route = cors.add(
-        resource.add_route("POST", login), {
-            "http://127.0.0.1:800": aiohttp_cors.ResourceOptions(
-                allow_credentials=True,
-                expose_headers=("X-Custom-Server-Header",),
-                allow_headers=("X-Requested-With", "Content-Type"),
-                max_age=3600,
-            )
-        })
+    cors.add(resource.add_route("POST", login))
 
-    resource = cors.add(app.router.add_resource("/chat/conversations"))
-    route = cors.add(
-        resource.add_route("POST", conversations), {
-            "http://127.0.0.1:800": aiohttp_cors.ResourceOptions(
-                allow_credentials=True,
-                expose_headers=("X-Custom-Server-Header",),
-                allow_headers=("X-Requested-With", "Content-Type"),
-                max_age=3600,
-            )
-        })
+    resource = cors.add(app.router.add_resource("/auth/conversations"))
+    cors.add(resource.add_route("POST", conversations))
+
+    resource = cors.add(app.router.add_resource("/{tail:.*}"))
+    cors.add(resource.add_route("GET", index))
