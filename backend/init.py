@@ -3,10 +3,13 @@ import asyncio
 
 
 dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
+dsn_super = 'dbname=chatdb user=postgres password=postgres host=localhost'
+
 
 async def create_tables():
     print("-----------------------------")
     print("Database initialized...")
+    await create_extension()
     await create_users_table()
     await create_chat_table()
     await create_party_table()
@@ -15,11 +18,26 @@ async def create_tables():
     print("Database initialized finished")
     print("-----------------------------")
 
+async def create_extension():
+    """
+    create EXTENSION for token column
+    """
+    async with aiopg.create_pool(dsn_super) as pool:
+        async with pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                s = """
+                CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
+                """
+                await cur.execute(s)
+
 
 async def create_users_table():
     """
     user_id - id пользователя чата
     name - имя пользователя
+    password - пароль пользователя
+    email - email пользователя
+    token - токен (необходим для аутентификации)
     """
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
@@ -28,8 +46,9 @@ async def create_users_table():
                 CREATE TABLE IF NOT EXISTS users(
                     user_id SERIAL PRIMARY KEY,
                     name VARCHAR(100),
-                    password VARCHAR(200),
-                    email VARCHAR(100)
+                    password VARCHAR(200) NOT NULL,
+                    email VARCHAR(100) UNIQUE NOT NULL,
+                    token uuid DEFAULT uuid_generate_v4()
                 )
                 """
                 await cur.execute(s)
