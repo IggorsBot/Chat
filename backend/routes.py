@@ -17,11 +17,11 @@ def setup_routes(app, web):
     resource = cors.add(app.router.add_resource("/auth/registration"))
     cors.add(resource.add_route("POST", registration))
 
-    resource = cors.add(app.router.add_resource("/messages/{chat_id}"))
-    cors.add(resource.add_route("POST", get_messages))
-
     resource = cors.add(app.router.add_resource("/auth/login"))
     cors.add(resource.add_route("POST", login))
+
+    resource = cors.add(app.router.add_resource("/messages/{chat_id}"))
+    cors.add(resource.add_route("POST", get_messages))
 
     resource = cors.add(app.router.add_resource("/auth/conversations"))
     cors.add(resource.add_route("POST", conversations))
