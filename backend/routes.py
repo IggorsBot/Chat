@@ -23,8 +23,8 @@ def setup_routes(app, web):
     resource = cors.add(app.router.add_resource("/messages/{chat_id}"))
     cors.add(resource.add_route("POST", get_messages))
 
-    resource = cors.add(app.router.add_resource("/auth/conversations"))
-    cors.add(resource.add_route("POST", conversations))
+    resource = cors.add(app.router.add_resource("/chat/conversations"))
+    cors.add(resource.add_route("GET", conversations))
 
     resource = cors.add(app.router.add_resource("/{tail:.*}"))
     cors.add(resource.add_route("GET", index))

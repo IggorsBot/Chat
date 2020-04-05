@@ -1,8 +1,11 @@
 from aiohttp import web, WSMsgType
-from chat.database import create_message, get_messages_from_db
+from chat.database import get_conversations
+from auth.database import get_user_from_token
 import json
 import aiohttp_cors
 from ast import literal_eval
+from aiohttp_session import setup, get_session, session_middleware
+
 
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
@@ -20,26 +23,40 @@ async def websocket_handler(request):
             print('ws connection closed with exception %s' %
                   ws.exception())
 
-    print('websocket connection closed')
+    # print('websocket connection closed')
     return ws
 
 
 async def get_messages(request):
+    session = await get_session(request)
     chat_id = request.match_info.get('chat_id')
     chat_messages = await get_messages_from_db(chat_id)
     return web.Response(text=json.dumps(chat_messages), status=200, headers={
         "X-Custom-Server-Header": "Custom data",
     })
 
-async def conversations(request):
-    post_data = await request.json()
-    user_id = post_data['user_id']
-    conversations = await get_conversations(user_id)
-    print(conversations)
-    # text=json.dumps(conversation),
-    return web.Response( status=200, headers={
-        "X-Custom-Server-Header": "Custom data",
-    })
+async def conversations(request) -> web.json_response:
+    # Если пользователь не авторизован
+    # Отправляем сообщение об ошибке (Invalid token)
+    if 'Token' not in request.cookies:
+        return web.json_response(
+            status=400,
+            data={"message": "Invalid token"},
+            content_type="application/json",
+            dumps=json.dumps)
+
+    # Если пользователь авторизован
+    # Находим его в БД
+    # И возвращаем все его переписки (conversations)
+    token = request.cookies['Token']
+    # token: UUID = uuid4()
+    user = await get_user_from_token(token)
+    conversations = await get_conversations(4)
+    return web.json_response(
+        status=200,
+        data=conversations,
+        content_type="application/json",
+        dumps=json.dumps)
 
 
 async def index(request):

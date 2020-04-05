@@ -4,35 +4,21 @@ import asyncio
 
 dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
 
-async def create_message(message):
+async def get_conversations(user_id: int):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                s = "INSERT INTO messages (chat_id, user_id, contect, date_create) VALUES ({chat_id}, {user}, '{contect}', now());".format(chat_id=message['chatId'], user=message['user'], contect=message['contect'])
+                s = """
+                SELECT chat.name
+                FROM chat
+                INNER JOIN party ON chat.chat_id = party.chat_id
+                WHERE party.user_id = '{user_id}';
+                """.format(user_id = user_id)
+
                 await cur.execute(s)
 
-
-async def get_messages_from_db(chat_id):
-    async with aiopg.create_pool(dsn) as pool:
-        async with pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute("SELECT contect, users.name, date_create FROM messages, users WHERE chat_id={chat_id}".format(chat_id=chat_id))
                 res = []
-
                 async for row in cur:
-                    ret = {'contect': row[0], 'user': row[1], 'date': str(row[2])}
-                    res.append(ret)
-                return res
-
-
-async def get_messages_chat(user_id):
-    async with aiopg.create_pool(dsn) as pool:
-        async with pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute("SELECT chat_id, users.name, name FROM chat, users WHERE user_id={user_id".format(user_id=user_id))
-                res = []
-
-                async for row in cur:
-                    ret = {'chat_id': row[0], 'user': row[1], 'title': row[2]}
+                    ret = {'chat_name': row[0]}
                     res.append(ret)
                 return res

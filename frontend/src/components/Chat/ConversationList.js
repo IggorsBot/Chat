@@ -13,14 +13,18 @@ class ConversationList extends React.Component{
   }
 
   componentDidMount(){
-    this.getConversation()
+    this.getConversations()
   }
 
-  getConversation = async () => {
+  getConversations = async () => {
       try {
-        let result = await axios.post(`http://localhost:8080/chat/conversations`, {
-        user_id: this.state.user_id
-      })
+        console.log('test')
+        let result = await axios(`http://127.0.0.1:8080/chat/conversations`, {
+          method: "get",
+          withCredentials: true
+        })
+        console.log(result.data)
+        this.setState({conversations: result.data})
     } catch (error) {
       console.log("error", error)
     }
@@ -34,13 +38,13 @@ class ConversationList extends React.Component{
           <div className="conversation" key={index} onClick={()=>{this.props.changeChat(index)}}>
             <img  src="daryl.png"/>
             <div className="title-text">
-              {conversation.title}
+              {conversation.chat_name}
             </div>
             <div className="created-date">
-              {conversation.date}
+              chat_date
             </div>
             <div className="conversation-message">
-              {conversation.message}
+              chat_message
             </div>
           </div>
         )
