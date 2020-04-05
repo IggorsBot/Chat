@@ -12,14 +12,14 @@ class Login extends Component {
   }
 
   sendDataLogin = async () => {
-      try {
-        let result = await axios(`http://localhost:8080/auth/login`, {
-          method: post,
-          data: {
-            email: this.state.email,
-            password: this.state.password
-          },
-          withCredentials: true
+    try {
+      let result = await axios(`http://127.0.0.1:8080/auth/login`, {
+        method: "post",
+        data: {
+          email: this.state.email,
+          password: this.state.password
+        },
+        withCredentials: true
       })
       if (result.status == 200){
         this.props.changeAuth()

@@ -1,32 +1,48 @@
 from datetime import datetime, timedelta
-import jwt
-from auth.database import create_user
+from auth.database import create_user, get_user_from_email, refresh_token
 from aiohttp import web
 import bcrypt
 from uuid import uuid4, UUID
 import json
 from aiohttp_session import setup, get_session, session_middleware
+import psycopg2
 
 
-JWT_SECRET = 'secret'
-JWT_ALGORITHM = 'HS256'
-JWT_EXP_DELTA_SECONDS = 20
+async def login(request) -> web.json_response:
+    # Получаем данные от клиента
+    post_data: dict = await request.json()
+    email: str = str(post_data['email'])
+    password: str = str(post_data['password'])
+    user: dict = await get_user_from_email(email)
 
-async def login(request):
-    post_data = await request.json()
-    assert post_data == {'email': 'test@mail.ru', 'password': '123456'}
+    # Если email неверный, возвращаем клиенту сообщение  invalid email
+    if not user:
+        return web.json_response(
+            status=400,
+            data={"message": "Invalid email"},
+            content_type='application/json',
+            dumps=json.dumps)
 
-    # Проверить, есть ли такой пользователь.
-    # Если пользователь существует и данные совпадают, вернуть токен
-    # Если пользователя не существует или данные не совпадают, вернуть Response status 400
+    # Если пароль неверный, возвращаем клиенту сообщение  invalid password
+    if not bcrypt.checkpw(password.encode(), user['password'].encode()):
+        return web.json_response(
+            status=400,
+            data={"message": "Invalid password"},
+            content_type='application/json',
+            dumps=json.dumps)
 
-    return web.Response(status=200, headers={
-        "X-Custom-Server-Header": "Custom data",
-    })
+    # Если полученные от клиента данные верны,
+    # Обновляем token и добавляем его в cookie
+    token: UUID = uuid4()
+    await refresh_token(user['user_id'], token)
+
+    response = web.json_response(status=200)
+    response.set_cookie(name='Token', value=str(token))
+    return response
 
 
-
-async def registration(request):
+async def registration(request) -> web.json_response:
+    # Получаем данные от клиента
     post_data: dict = await request.json()
     email: str = str(post_data['email'])
     password: str = str(post_data['password'])
@@ -37,20 +53,20 @@ async def registration(request):
 
     # Создаем token для аутентификации
     token: UUID = uuid4()
-    await create_user(email, hash_password, token)
 
-    response_body: dict = {"hello": "wo"}
+
+    try:
+        await create_user(email, hash_password, token)
+    except psycopg2.IntegrityError as e:
+        return web.json_response(
+            status=400,
+            data={"message": "User with email address already exist"},
+            content_type='application/json',
+            dumps=json.dumps)
+
     response = web.json_response(
-        data=response_body,
         status=200,
         content_type='application/json',
         dumps=json.dumps)
     response.set_cookie(name='Token', value=str(token))
     return response
-
-# async def test(request):
-#     print('test', request.__dict__)
-#     response_body: dict = {"hello": "wo"}
-#     response = web.json_response(text=json.dumps(response_body), status=200, content_type='application/json', dumps=json.dumps)
-#     response.set_cookie(name='TestFromTest', value='Oooo')
-#     return response
