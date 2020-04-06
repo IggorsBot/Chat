@@ -40,7 +40,6 @@ class ChatApp extends Component {
         method: "get",
         withCredentials: true
       })
-      console.log('result', result.data)
       this.setState({ messages: result.data, chatId: chatId})
 
     } catch (error) {

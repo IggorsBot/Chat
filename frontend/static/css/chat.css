@@ -180,9 +180,11 @@ body {
 #chat-message-list {
   grid-area: chat-message-list;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   padding: 0 20px;
   overflow-y: scroll;
+  justify-content: end;
+
 }
 
 .message-row {
@@ -267,4 +269,11 @@ body {
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.message-date {
+  text-align: center;
+  font-size: 14px;
+  border-bottom: 1px solid #0048AA;
+  margin-bottom: 20px;
 }

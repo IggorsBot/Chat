@@ -17,8 +17,8 @@ class Menu extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-     chatId: -1,
-     user_id: 0,
+     chat_id: -1,
+     user_id: -1,
      messages: [],
    }
   }
@@ -26,7 +26,7 @@ class Menu extends React.Component {
   static getDerivedStateFromProps(nextProps, prevState) {
    return {
     messages: nextProps.messages,
-    chatId: nextProps.chatId
+    chat_id: nextProps.chat_id
    };
   }
 
@@ -51,23 +51,44 @@ class Menu extends React.Component {
       console.log('disconnected')
     }
   }
+  writeMessage = (message, index) => {
+    if (index > 0) {
+      let first_date = new Date(this.state.messages[index].date_create)
+      let second_date = new Date(this.state.messages[index-1].date_create)
+
+      first_date.setHours(0, 0, 0, 0)
+      second_date.setHours(0, 0, 0, 0)
+
+      if (+first_date === +second_date){
+        return <Message message={message}
+                        index={index}
+                        user_id={this.state.user_id}
+                        key={index} day={false}/>
+      }
+    }
+    return <Message message={message}
+                    index={index}
+                    user_id={this.state.user_id}
+                    key={index} day={true}/>
+  }
 
   addMessage = message =>
     this.setState(state => ({ messages: [ message, ...state.messages]}))
 
   submitMessage = messageString => {
-    const message = {contect: messageString, user: 1, chatId: this.state.chatId}
+    const message = {contect: messageString,
+                     user: this.state.user_id,
+                     chat_id: this.state.chat_id}
     this.ws.send(JSON.stringify(message))
   }
 
   render(){
-    console.log('messages', this.state.messages)
     return (
       <Fragment>
         <Title />
         <div id="chat-message-list">
         {this.state.messages.map((message, index)=>{
-          return (<Message message={message} key={index} user_id={this.state.user_id}/>)
+          return this.writeMessage(message, index)
         })}
         </div>
         <InputMessage ws={this.ws} onSubmitMessage={messageString => this.submitMessage(messageString)}/>
