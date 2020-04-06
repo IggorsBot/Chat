@@ -1,9 +1,15 @@
 import React, {Fragment} from 'react'
 
+// Some components
 import Title from './Title'
 import Message from './Message'
 import InputMessage from './InputMessage'
 
+// Redux store
+import {connect} from 'react-redux'
+import store from "../../store";
+
+// Request data
 import axios from 'axios'
 import 'babel-polyfill';
 
@@ -12,7 +18,7 @@ class Menu extends React.Component {
     super(props);
     this.state = {
      chatId: -1,
-     name: 'Bob',
+     user_id: 0,
      messages: [],
    }
   }
@@ -24,14 +30,13 @@ class Menu extends React.Component {
    };
   }
 
-
   ws = new WebSocket(`ws://localhost:8080/ws`)
 
   componentDidMount() {
-
-    this.setState(state => ({
-      messages: this.props.messages
-    }))
+    store.subscribe(() => this.setState(state => ({
+              user_id: store.getState().user_id,
+              messages: this.props.messages
+        })));
 
     this.ws.onopen = () => {
       console.log('connected')
@@ -47,7 +52,6 @@ class Menu extends React.Component {
     }
   }
 
-
   addMessage = message =>
     this.setState(state => ({ messages: [ message, ...state.messages]}))
 
@@ -57,15 +61,13 @@ class Menu extends React.Component {
   }
 
   render(){
+    console.log('messages', this.state.messages)
     return (
       <Fragment>
         <Title />
         <div id="chat-message-list">
-
         {this.state.messages.map((message, index)=>{
-          return (
-            <ChatMessage message={message} key={index}/>
-          )
+          return (<Message message={message} key={index} user_id={this.state.user_id}/>)
         })}
         </div>
         <InputMessage ws={this.ws} onSubmitMessage={messageString => this.submitMessage(messageString)}/>
@@ -74,4 +76,10 @@ class Menu extends React.Component {
   }
 }
 
-export default Menu
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+};
+
+export default connect(mapStateToProps)(Menu)

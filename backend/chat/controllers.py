@@ -5,6 +5,7 @@ import json
 import aiohttp_cors
 from ast import literal_eval
 from aiohttp_session import setup, get_session, session_middleware
+from uuid import uuid4, UUID
 
 
 async def websocket_handler(request):
@@ -48,10 +49,17 @@ async def conversations(request) -> web.json_response:
     # Если пользователь авторизован
     # Находим его в БД
     # И возвращаем все его переписки (conversations)
-    token = request.cookies['Token']
-    # token: UUID = uuid4()
+    token: UUID = request.cookies['Token']
     user = await get_user_from_token(token)
-    conversations = await get_conversations(4)
+
+    if not user:
+        return web.json_response(
+            status=400,
+            data={"message": "Invalid token"},
+            content_type="application/json",
+            dumps=json.dumps)
+
+    conversations = await get_conversations(user['user_id'])
     return web.json_response(
         status=200,
         data=conversations,

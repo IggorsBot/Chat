@@ -31,11 +31,8 @@ async def login(request) -> web.json_response:
             content_type='application/json',
             dumps=json.dumps)
 
-    # Если полученные от клиента данные верны,
-    # Обновляем token и добавляем его в cookie
-    token: UUID = uuid4()
-    await refresh_token(user['user_id'], token)
 
+    token: UUID = user['token']
     response = web.json_response(status=200)
     response.set_cookie(name='Token', value=str(token))
     return response
