@@ -105,7 +105,7 @@ async def create_messages_table():
                     chat_id INTEGER REFERENCES chat(chat_id),
                     user_id INTEGER REFERENCES users(user_id),
                     contect VARCHAR(200),
-                    date_create DATE NOT NULL DEFAULT CURRENT_DATE
+                    date_create TIMESTAMP NOT NULL DEFAULT now()
                 )
                 """
                 await cur.execute(s)

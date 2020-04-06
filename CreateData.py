@@ -31,7 +31,7 @@ parties = [{"chat_id": 1, "user_id": 1}, {"chat_id": 1, "user_id": 2},
         {"chat_id": 5, "user_id": 3}, {"chat_id": 5, "user_id": 4},
         {"chat_id": 6, "user_id": 8}, {"chat_id": 6, "user_id": 9}]
 
-messages = [{"chat_id": 1, "user_id": 1, "contect": "Hello everybody!"},
+messages = [{"chat_id": 1, "user_id": 1, "contect": "Hello everybody!")},
             {"chat_id": 1, "user_id": 2, "contect": "Hello"},
             {"chat_id": 1, "user_id": 3, "contect": "Hi"},
             {"chat_id": 2, "user_id": 4, "contect": "Hi, Susan! You came so early today."},

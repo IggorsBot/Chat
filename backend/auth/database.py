@@ -50,14 +50,14 @@ async def get_user_from_token(token: UUID):
                     ret = {'user_id': row[0], 'name': row[1], 'password': row[2], 'email': row[3], 'token': row[4]}
                 return ret
 
-async def refresh_token(user_id: int, token: UUID):
-    async with aiopg.create_pool(dsn) as pool:
-        async with pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                s = """
-                UPDATE users
-                SET token='{token}'
-                WHERE
-                user_id='{user_id}';
-                """.format(token=token, user_id=user_id)
-                await cur.execute(s)
+# async def refresh_token(user_id: int, token: UUID):
+#     async with aiopg.create_pool(dsn) as pool:
+#         async with pool.acquire() as conn:
+#             async with conn.cursor() as cur:
+#                 s = """
+#                 UPDATE users
+#                 SET token='{token}'
+#                 WHERE
+#                 user_id='{user_id}';
+#                 """.format(token=token, user_id=user_id)
+#                 await cur.execute(s)

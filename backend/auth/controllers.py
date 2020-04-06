@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from auth.database import create_user, get_user_from_email, refresh_token
+from auth.database import create_user, get_user_from_email, get_user_from_token
 from aiohttp import web
 import bcrypt
 from uuid import uuid4, UUID
@@ -67,3 +67,23 @@ async def registration(request) -> web.json_response:
         dumps=json.dumps)
     response.set_cookie(name='Token', value=str(token))
     return response
+
+async def get_user(request) -> web.json_response:
+    # Если пользователь не авторизован
+    # Отправляем сообщение об ошибке (Invalid token)
+    if 'Token' not in request.cookies:
+        return web.json_response(
+            status=400,
+            data={"message": "Invalid token"},
+            content_type="application/json",
+            dumps=json.dumps)
+
+    token: UUID = request.cookies['Token']
+    user: dict = await get_user_from_token(token)
+    del user['token']
+    del user['password']
+    return web.json_response(
+        status=200,
+        data=user,
+        content_type="application/json",
+        dumps=json.dumps)

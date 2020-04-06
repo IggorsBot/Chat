@@ -1,12 +1,12 @@
 from aiohttp import web, WSMsgType
-from chat.database import get_conversations
+from chat.database import get_conversations, get_messages_from_db
 from auth.database import get_user_from_token
 import json
 import aiohttp_cors
 from ast import literal_eval
 from aiohttp_session import setup, get_session, session_middleware
 from uuid import uuid4, UUID
-
+import datetime
 
 async def websocket_handler(request):
     ws = web.WebSocketResponse()
@@ -29,12 +29,24 @@ async def websocket_handler(request):
 
 
 async def get_messages(request):
-    session = await get_session(request)
+    # Если пользователь не авторизован
+    # Отправляем сообщение об ошибке (Invalid token)
+    if 'Token' not in request.cookies:
+        return web.json_response(
+            status=400,
+            data={"message": "Invalid token"},
+            content_type="application/json",
+            dumps=json.dumps)
+
     chat_id = request.match_info.get('chat_id')
     chat_messages = await get_messages_from_db(chat_id)
-    return web.Response(text=json.dumps(chat_messages), status=200, headers={
-        "X-Custom-Server-Header": "Custom data",
-    })
+    for message in chat_messages:
+        message['date_create'] = str(message['date_create'])
+    return web.json_response(
+        status=200,
+        data=chat_messages,
+        content_type="application/json",
+        dumps=json.dumps)
 
 async def conversations(request) -> web.json_response:
     # Если пользователь не авторизован
