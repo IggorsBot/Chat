@@ -18,10 +18,9 @@ class InputMessage extends React.Component{
           action="."
           onSubmit={e => {
             e.preventDefault()
-            this.props.onSubmitMessage(this.state.message)
             this.setState({ message: '' })
-          }}
-        >
+            this.props.onSubmitMessage(this.state.message)
+          }}>
 
         <div id="chat-form" style={{padding: "10px"}}>
           <img src="attachment-logo.svg"/>
@@ -33,7 +32,6 @@ class InputMessage extends React.Component{
             />
           </div>
         </form>
-
       </Fragment>
     )
   }

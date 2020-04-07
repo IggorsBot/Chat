@@ -22,7 +22,7 @@ class ChatApp extends Component {
 
   state = {
     user: {},
-    chatId: 0,
+    chat_id: 0,
     messages: [],
   }
 
@@ -30,21 +30,25 @@ class ChatApp extends Component {
     get_user()
   }
 
-  changeChat = (chatId) => {
-    this.getMessages(chatId)
+  changeChat = (chat_id) => {
+    this.getMessages(chat_id)
   }
 
-  async getMessages (chatId) {
+  async getMessages (chat_id) {
     try {
-      let result = await axios(`http://127.0.0.1:8080/messages/${chatId}`, {
+      let result = await axios(`http://127.0.0.1:8080/messages/${chat_id}`, {
         method: "get",
         withCredentials: true
       })
-      this.setState({ messages: result.data, chatId: chatId})
+      this.setState({ messages: result.data, chat_id: chat_id})
 
     } catch (error) {
       console.log("error", error)
     }
+  }
+
+  addMessage = message => {
+    this.setState({messages: [...this.state.messages, JSON.parse(message)]})
   }
 
   render() {
@@ -54,7 +58,7 @@ class ChatApp extends Component {
           <Search />
           <ConversationList changeChat={this.changeChat}/>
           <AddButton />
-          <Menu messages={this.state.messages} chatId={this.state.chatId}/>
+          <Menu messages={this.state.messages} chat_id={this.state.chat_id} addMessage={this.addMessage}/>
         </Provider>
       </div>
     )

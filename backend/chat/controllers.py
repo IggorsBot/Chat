@@ -1,5 +1,5 @@
 from aiohttp import web, WSMsgType
-from chat.database import get_conversations, get_messages_from_db
+from chat.database import get_conversations, get_messages_from_db, create_message
 from auth.database import get_user_from_token
 import json
 import aiohttp_cors
@@ -18,13 +18,15 @@ async def websocket_handler(request):
                 await ws.close()
             else:
                 msg_dict = literal_eval(msg.data)
-                await create_message(msg_dict)
+                message = await create_message(msg_dict)
+                message['date_create'] = str(message['date_create'])
+                await ws.send_json(json.dumps(message))
 
         elif msg.type == WSMsgType.ERROR:
             print('ws connection closed with exception %s' %
                   ws.exception())
 
-    # print('websocket connection closed')
+    print('websocket connection closed')
     return ws
 
 

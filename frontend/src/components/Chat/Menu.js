@@ -44,7 +44,7 @@ class Menu extends React.Component {
 
     this.ws.onmessage = evt => {
       const message = JSON.parse(evt.data)
-      this.addMessage(message)
+      this.props.addMessage(message)
     }
 
     this.ws.onclose = () => {
@@ -72,12 +72,9 @@ class Menu extends React.Component {
                     key={index} day={true}/>
   }
 
-  addMessage = message =>
-    this.setState(state => ({ messages: [ message, ...state.messages]}))
-
   submitMessage = messageString => {
     const message = {contect: messageString,
-                     user: this.state.user_id,
+                     user_id: this.state.user_id,
                      chat_id: this.state.chat_id}
     this.ws.send(JSON.stringify(message))
   }
