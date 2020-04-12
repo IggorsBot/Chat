@@ -88,15 +88,23 @@ async def create_message(message):
 
 async def create_data():
     print('-------------------------')
-    print('Create data...')
+
+    print('Create users...')
     for user in users:
         await create_users(user)
+
+    print('Create chats...')
     for chat in chats:
         await create_chats(chat)
+
+    print('Create users...')
     for party in parties:
         await create_party(party)
+
+    print('Create messages...')
     for message in messages:
         await create_message(message)
+        
     print('Create data finished')
     print('-------------------------')
 
