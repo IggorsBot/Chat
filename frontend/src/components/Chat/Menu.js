@@ -38,9 +38,7 @@ class Menu extends React.Component {
               messages: this.props.messages
         })));
 
-    this.ws.onopen = () => {
-      console.log('connected')
-    }
+    this.ws.onopen = () => {}
 
     this.ws.onmessage = evt => {
       const message = JSON.parse(evt.data)
