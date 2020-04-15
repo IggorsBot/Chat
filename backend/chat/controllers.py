@@ -26,7 +26,6 @@ async def websocket_handler(request):
             print('ws connection closed with exception %s' %
                   ws.exception())
 
-    print('websocket connection closed')
     return ws
 
 

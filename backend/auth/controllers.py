@@ -48,12 +48,14 @@ async def registration(request) -> web.json_response:
     hashed: bytes = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
     hash_password: str = hashed.decode()
 
-    # Создаем token для аутентификации
+    # Создаем token для аутентификации’s being prepared. For this aiohttp.web provides signals.
     token: UUID = uuid4()
 
+    # Создаем уникальный id, по которому можно искать пользователей
+    person_id: UUID = int(str(uuid4().int)[0:8])
 
     try:
-        await create_user(email, hash_password, token)
+        await create_user(person_id, email, hash_password, token)
     except psycopg2.IntegrityError as e:
         return web.json_response(
             status=400,
@@ -68,6 +70,15 @@ async def registration(request) -> web.json_response:
     response.set_cookie(name='Token', value=str(token))
     return response
 
+
+async def logout(request) -> web.json_response:
+    response = web.json_response(
+        status=200
+    )
+    response.del_cookie(name='Token')
+    return response
+
+
 async def get_user(request) -> web.json_response:
     # Если пользователь не авторизован
     # Отправляем сообщение об ошибке (Invalid token)
@@ -80,8 +91,11 @@ async def get_user(request) -> web.json_response:
 
     token: UUID = request.cookies['Token']
     user: dict = await get_user_from_token(token)
+
+    # Нам нужна только информация о пользователе
     del user['token']
     del user['password']
+
     return web.json_response(
         status=200,
         data=user,

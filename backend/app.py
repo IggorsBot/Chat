@@ -17,6 +17,4 @@ setup(app, EncryptedCookieStorage(secret_key))
 setup_routes(app, web)
 init_database()
 
-
-
 web.run_app(app)

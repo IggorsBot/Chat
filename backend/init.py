@@ -11,9 +11,13 @@ async def create_tables():
     print("Database initialized...")
     await create_extension()
     await create_users_table()
+    print("Create users table...")
     await create_chat_table()
+    print("Create chat table...")
     await create_party_table()
+    print("Create party table...")
     await create_messages_table()
+    print("Create messages table...")
     await create_message_status_table()
     print("Database initialized finished")
     print("-----------------------------")
@@ -33,7 +37,8 @@ async def create_extension():
 
 async def create_users_table():
     """
-    user_id - id пользователя чата
+    user_id - id пользователя в БД
+    person_id - id который доступен пользователю (Например для добавления собеседника)
     name - имя пользователя
     password - пароль пользователя
     email - email пользователя
@@ -45,6 +50,7 @@ async def create_users_table():
                 s = """
                 CREATE TABLE IF NOT EXISTS users(
                     user_id SERIAL PRIMARY KEY,
+                    person_id SERIAL,
                     name VARCHAR(100),
                     password VARCHAR(200) NOT NULL,
                     email VARCHAR(100) UNIQUE NOT NULL,
