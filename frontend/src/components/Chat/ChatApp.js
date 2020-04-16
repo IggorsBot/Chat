@@ -15,7 +15,6 @@ import ConversationList from './ConversationList'
 import Menu from './Menu'
 import AddButton from './AddButton'
 import InputMessage from './InputMessage'
-import Title from './Title'
 import Search from './Search'
 
 class ChatApp extends Component {
@@ -58,7 +57,10 @@ class ChatApp extends Component {
           <Search />
           <ConversationList changeChat={this.changeChat}/>
           <AddButton />
-          <Menu messages={this.state.messages} chat_id={this.state.chat_id} addMessage={this.addMessage}/>
+          <Menu messages={this.state.messages}
+                chat_id={this.state.chat_id}
+                addMessage={this.addMessage}
+                changeAuth={this.props.changeAuth}/>
         </Provider>
       </div>
     )

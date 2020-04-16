@@ -14,6 +14,8 @@ import axios from 'axios'
 import 'babel-polyfill';
 
 class Menu extends React.Component {
+  _isMounted = false;
+
   constructor(props){
     super(props);
     this.state = {
@@ -32,11 +34,21 @@ class Menu extends React.Component {
 
   ws = new WebSocket(`ws://localhost:8080/ws`)
 
+  getMessagesDataFromStore = () => {
+    this.setState(state => ({
+      user_id: store.getState().user_id,
+      messages: this.props.messages
+    }))
+  }
+
   componentDidMount() {
-    store.subscribe(() => this.setState(state => ({
-              user_id: store.getState().user_id,
-              messages: this.props.messages
-        })));
+    this._isMounted = true;
+
+    store.subscribe(() => {
+      if (this._isMounted) {
+        this.getMessagesDataFromStore()
+      }
+    })
 
     this.ws.onopen = () => {}
 
@@ -49,6 +61,11 @@ class Menu extends React.Component {
       console.log('disconnected')
     }
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   writeMessage = (message, index) => {
     if (index > 0) {
       let first_date = new Date(this.state.messages[index].date_create)
@@ -80,7 +97,7 @@ class Menu extends React.Component {
   render(){
     return (
       <Fragment>
-        <Title />
+        <Title changeAuth={this.props.changeAuth}/>
         <div id="chat-message-list">
         {this.state.messages.map((message, index)=>{
           return this.writeMessage(message, index)
