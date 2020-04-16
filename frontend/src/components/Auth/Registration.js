@@ -16,7 +16,7 @@ class Registration extends Component {
 
   sendDataRegistration = async () => {
     try {
-      let result = await axios(`http://127.0.0.1:8080/auth/registration`, {
+      let result = await axios(`http://127.0.0.1:8080/api/auth/registration`, {
         method: "post",
         data: {
           email: this.state.email,

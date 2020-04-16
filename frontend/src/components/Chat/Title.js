@@ -4,13 +4,11 @@ import React from 'react'
 import {connect} from 'react-redux'
 import store from '../../store'
 
-import Logout from './../Auth/Logout'
-import Profile from './ProfileLinks/Profile'
+import UserMenu from './UserMenu'
 
 
 class Title extends React.Component {
   _isMounted = false;
-
 
   state = {
     email: "",
@@ -23,6 +21,7 @@ class Title extends React.Component {
       name: store.getState().name,
     }));
   }
+
   componentDidMount() {
     this._isMounted = true;
 
@@ -43,18 +42,7 @@ class Title extends React.Component {
         <span>
           {this.state.name == null ? this.state.email : this.state.name}
         </span>
-        <div className="dropdown">
-          Menu
-          <div className="dropdown-content">
-            <div className="profile-link">
-              <Profile />
-            </div>
-            <div className="profile-link">
-              <Logout changeAuth={this.props.changeAuth}/>
-            </div>
-
-          </div>
-        </div>
+        <UserMenu changeAuth={this.props.changeAuth}/>
       </div>
     )
   }

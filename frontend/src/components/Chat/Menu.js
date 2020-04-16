@@ -32,7 +32,7 @@ class Menu extends React.Component {
    };
   }
 
-  ws = new WebSocket(`ws://localhost:8080/ws`)
+  ws = new WebSocket(`ws://localhost:8080/api/chat_ws`)
 
   getMessagesDataFromStore = () => {
     this.setState(state => ({
@@ -57,9 +57,7 @@ class Menu extends React.Component {
       this.props.addMessage(message)
     }
 
-    this.ws.onclose = () => {
-      console.log('disconnected')
-    }
+    this.ws.onclose = () => {}
   }
 
   componentWillUnmount() {
@@ -98,11 +96,13 @@ class Menu extends React.Component {
     return (
       <Fragment>
         <Title changeAuth={this.props.changeAuth}/>
+
         <div id="chat-message-list">
         {this.state.messages.map((message, index)=>{
           return this.writeMessage(message, index)
         })}
         </div>
+
         <InputMessage ws={this.ws} onSubmitMessage={messageString => this.submitMessage(messageString)}/>
       </Fragment>
     )

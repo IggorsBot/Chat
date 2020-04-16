@@ -13,7 +13,7 @@ class ConversationList extends React.Component{
 
   getConversations = async () => {
       try {
-        let result = await axios(`http://127.0.0.1:8080/chat/conversations`, {
+        let result = await axios(`http://127.0.0.1:8080/api/chat/conversations`, {
           method: "get",
           withCredentials: true
         })

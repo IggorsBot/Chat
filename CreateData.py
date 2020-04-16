@@ -1,9 +1,11 @@
 import aiopg
 import asyncio
 import bcrypt
+from uuid import uuid4
 
 
 dsn = 'dbname=chatdb user=chat password=chatpass host=localhost'
+
 
 users = [{"name": "James", "password": "123456", "email": "James@mail.ru"},
     {"name": "John", "password": "qwerty", "email": "John@gmail.com"},
@@ -31,7 +33,7 @@ parties = [{"chat_id": 1, "user_id": 1}, {"chat_id": 1, "user_id": 2},
         {"chat_id": 5, "user_id": 3}, {"chat_id": 5, "user_id": 4},
         {"chat_id": 6, "user_id": 8}, {"chat_id": 6, "user_id": 9}]
 
-messages = [{"chat_id": 1, "user_id": 1, "contect": "Hello everybody!")},
+messages = [{"chat_id": 1, "user_id": 1, "contect": "Hello everybody!"},
             {"chat_id": 1, "user_id": 2, "contect": "Hello"},
             {"chat_id": 1, "user_id": 3, "contect": "Hi"},
             {"chat_id": 2, "user_id": 4, "contect": "Hi, Susan! You came so early today."},
@@ -45,45 +47,65 @@ messages = [{"chat_id": 1, "user_id": 1, "contect": "Hello everybody!")},
             {"chat_id": 5, "user_id": 3, "contect": "Hello, Michael! How are you? "},
             {"chat_id": 5, "user_id": 4, "contect": "Hello, Robert! Just wonderful! Glad to see you."}]
 
-async def create_users(user):
+async def create_user(user: dict):
+    await create_user_in_db(user)
+
+async def create_user_in_db(user):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
+
+                # Создаем пароль
                 password = user["password"].encode()
                 hashed = bcrypt.hashpw(password, bcrypt.gensalt())
                 hash_password = hashed.decode()
-                s = """INSERT INTO users (name, password, email)
-                VALUES ('{user_name}', '{password}', '{email}');
-                """.format(user_name=user['name'], password=hash_password, email=user['email'])
+
+                # Создаем person_id
+                person_id = int(str(uuid4().int)[0:8])
+
+                # Создаем запрос в БД
+                s = """INSERT INTO users (person_id, name, password, email)
+                VALUES ('{person_id}', '{user_name}', '{password}', '{email}');
+                """.format(person_id=person_id, user_name=user['name'], password=hash_password, email=user['email'])
+
                 await cur.execute(s)
 
-async def create_chats(chat):
+async def create_chat(chat):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
+
+                # Создаем запрос в БД
                 s = """INSERT INTO chat (name, user_id)
                 VALUES ('{chat_name}', '{user_id}');
                 """.format(chat_name=chat['name'], user_id=chat['user_id'])
+
                 await cur.execute(s)
 
 async def create_party(party):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
+
+                # Создаем запрос в БД
                 s = """INSERT INTO party (chat_id, user_id)
                 VALUES ('{chat_id}', '{user_id}');
                 """.format(chat_id=party['chat_id'], user_id=party['user_id'])
+
                 await cur.execute(s)
 
 async def create_message(message):
     async with aiopg.create_pool(dsn) as pool:
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
+
+                # Создаем запрос в БД
                 s = """INSERT INTO messages (chat_id, user_id, contect)
                 VALUES ('{chat_id}', '{user_id}', '{contect}');
                 """.format(chat_id=message['chat_id'],
                             user_id=message['user_id'],
                             contect=message['contect'])
+
                 await cur.execute(s)
 
 async def create_data():
@@ -91,20 +113,20 @@ async def create_data():
 
     print('Create users...')
     for user in users:
-        await create_users(user)
+        await create_user(user)
 
     print('Create chats...')
     for chat in chats:
-        await create_chats(chat)
+        await create_chat(chat)
 
-    print('Create users...')
+    print('Create party...')
     for party in parties:
         await create_party(party)
 
     print('Create messages...')
     for message in messages:
         await create_message(message)
-        
+
     print('Create data finished')
     print('-------------------------')
 

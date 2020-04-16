@@ -14,7 +14,12 @@ async def create_user(person_id: int, email: str, password: str, token: UUID):
                 (person_id, email, password, token)
                 VALUES
                 ('{person_id}', '{email}', '{password}', '{token}');
-                """.format(person_id=person_id, email=email, password=password, token=token)
+                """.format(
+                        person_id=person_id,
+                        email=email,
+                        password=password,
+                        token=token
+                    )
                 await cur.execute(s)
 
 async def get_user_from_email(email: str) -> dict:

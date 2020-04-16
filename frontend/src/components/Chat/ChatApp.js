@@ -35,7 +35,7 @@ class ChatApp extends Component {
 
   async getMessages (chat_id) {
     try {
-      let result = await axios(`http://127.0.0.1:8080/messages/${chat_id}`, {
+      let result = await axios(`http://127.0.0.1:8080/api/messages/${chat_id}`, {
         method: "get",
         withCredentials: true
       })

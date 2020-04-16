@@ -14,25 +14,25 @@ def setup_routes(app, web):
 
 
     # Auth
-    resource = cors.add(app.router.add_resource("/auth/registration"))
+    resource = cors.add(app.router.add_resource("/api/auth/registration"))
     cors.add(resource.add_route("POST", registration))
 
-    resource = cors.add(app.router.add_resource("/auth/login"))
+    resource = cors.add(app.router.add_resource("/api/auth/login"))
     cors.add(resource.add_route("POST", login))
 
-    resource = cors.add(app.router.add_resource("/auth/user"))
+    resource = cors.add(app.router.add_resource("/api/auth/user"))
     cors.add(resource.add_route("GET", get_user))
 
     resource = cors.add(app.router.add_resource("/api/auth/logout"))
     cors.add(resource.add_route("GET", logout))
 
     # Chat
-    app.add_routes([web.get('/ws', websocket_handler)])
+    app.add_routes([web.get('/api/chat_ws', websocket_handler)])
 
-    resource = cors.add(app.router.add_resource("/messages/{chat_id}"))
+    resource = cors.add(app.router.add_resource("/api/messages/{chat_id}"))
     cors.add(resource.add_route("GET", get_messages))
 
-    resource = cors.add(app.router.add_resource("/chat/conversations"))
+    resource = cors.add(app.router.add_resource("/api/chat/conversations"))
     cors.add(resource.add_route("GET", conversations))
 
     resource = cors.add(app.router.add_resource("/{tail:.*}"))

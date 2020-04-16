@@ -16,7 +16,7 @@ class Login extends Component {
 
   sendDataLogin = async () => {
     try {
-      let result = await axios(`http://127.0.0.1:8080/auth/login`, {
+      let result = await axios(`http://127.0.0.1:8080/api/auth/login`, {
         method: "post",
         data: {
           email: this.state.email,
