@@ -32,7 +32,14 @@ async def get_user_from_email(email: str) -> dict:
                 await cur.execute(s)
                 ret: dict = {}
                 async for row in cur:
-                    ret = {'user_id': row[0], 'name': row[1], 'password': row[2], 'email': row[3], 'token': row[4]}
+                    ret = {
+                        'user_id': row[0],
+                        'person_id': row[1],
+                        'name': row[2],
+                        'password': row[3],
+                        'email': row[4],
+                        'token': row[5]
+                        }
                 return ret
 
 async def get_user_from_token(token: UUID):
@@ -47,5 +54,12 @@ async def get_user_from_token(token: UUID):
                 await cur.execute(s)
                 ret: dict = {}
                 async for row in cur:
-                    ret = {'user_id': row[0], 'name': row[1], 'password': row[2], 'email': row[3], 'token': row[4]}
+                    ret = {
+                        'user_id': row[0],
+                        'person_id': row[1],
+                        'name': row[2],
+                        'password': row[3],
+                        'email': row[4],
+                        'token': row[5]
+                        }
                 return ret
